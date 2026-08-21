@@ -1,4 +1,4 @@
-# 🛒 Products.
+# 🛒 Nexora.
 
 E-commerce Full Stack desarrollado con **React, Node.js, Express y MongoDB**.
 
