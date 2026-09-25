@@ -3,9 +3,10 @@ import mongoose from "mongoose";
 
 setServers(["1.1.1.1", "8.8.8.8"]);
 
-export const connectDB = async () => {
+export const connectDB = async (): Promise<void> => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
+
     console.log("DB is connected");
   } catch (error) {
     console.error("Database connection failed:", error);
