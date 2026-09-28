@@ -21,9 +21,12 @@ export const createProductSchema = z.object({
     message: "Category is required",
   }),
 
-  image: z.string().trim().url({
+  image: z.url({
     message: "Image must be a valid URL",
   }),
 });
 
 export const updateProductSchema = createProductSchema.partial();
+
+export type CreateProductBody = z.infer<typeof createProductSchema>;
+export type UpdateProductBody = z.infer<typeof createProductSchema>;

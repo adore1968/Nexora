@@ -9,7 +9,12 @@ import cartRoutes from "./routes/cart.routes.js";
 
 const app = express();
 
-app.use(cors({ origin: "https://nexora-frontend-2k4l.onrender.com", credentials: true }));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://nexora-frontend-2k4l.onrender.com",
+];
+
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 app.use(morgan("dev"));
 

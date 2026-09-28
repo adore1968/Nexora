@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
 import {
   registerRequest,
@@ -7,11 +7,20 @@ import {
   verifyTokenRequest,
 } from "../../api/auth";
 import { toast } from "react-toastify";
+import {
+  type User,
+  type RegisterUser,
+  type UserCredentials,
+} from "../../types/auth";
 
-function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [errors, setErrors] = useState(null);
 
   const getErrorMessage = (error, fallback) => {
@@ -24,7 +33,7 @@ function AuthProvider({ children }) {
     return data?.message || fallback;
   };
 
-  const signup = async (data) => {
+  const signup = async (data: RegisterUser): Promise<void> => {
     try {
       const res = await registerRequest(data);
 
@@ -42,7 +51,7 @@ function AuthProvider({ children }) {
     }
   };
 
-  const signin = async (data) => {
+  const signin = async (data: UserCredentials): Promise<void> => {
     try {
       const res = await loginRequest(data);
 
@@ -60,7 +69,7 @@ function AuthProvider({ children }) {
     }
   };
 
-  const logout = async () => {
+  const logout = async (): Promise<void> => {
     try {
       await logoutRequest();
       setIsAuthenticated(false);

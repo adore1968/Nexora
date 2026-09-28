@@ -1,10 +1,16 @@
-import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
-import { createAccessToken } from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
+import { User, UserType } from "../models/user.model.js";
+import { Request, Response } from "express";
+import { RegisterBody, LoginBody } from "../schemas/auth.schema.js";
+import { createAccessToken } from "../libs/jwt.js";
 import cookieConfig from "../utils/cookieConfig.js";
 
-const userResponse = (user) => ({
+interface JwtPayload {
+  id: string;
+}
+
+const userResponse = (user: UserType) => ({
   id: user._id,
   username: user.username,
   email: user.email,
@@ -13,7 +19,10 @@ const userResponse = (user) => ({
   updatedAt: user.updatedAt,
 });
 
-export const register = async (req, res) => {
+export const register = async (
+  req: Request<{}, {}, RegisterBody>,
+  res: Response,
+) => {
   try {
     const { username, email, password } = req.body;
     const userFound = await User.findOne({ email });
@@ -28,24 +37,33 @@ export const register = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = new User({ username, email, password: hashedPassword });
+
     const userSaved = await newUser.save();
 
     const token = await createAccessToken({
       id: userSaved._id,
     });
+
     res.cookie("token", token, cookieConfig);
+
     return res.json(userResponse(userSaved));
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    if (error instanceof Error) {
+      return res.status(500).json({ message: error.message });
+    }
+
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const login = async (req, res) => {
-  const { email, password } = req.body;
-
+export const login = async (req: Request<{}, {}, LoginBody>, res: Response) => {
   try {
+    const { email, password } = req.body;
+
     const userFound = await User.findOne({ email });
+
     if (!userFound) {
       return res.status(401).json([
         {
@@ -69,30 +87,48 @@ export const login = async (req, res) => {
     const token = await createAccessToken({
       id: userFound._id,
     });
+
     res.cookie("token", token, cookieConfig);
+
     return res.json(userResponse(userFound));
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    if (error instanceof Error) {
+      return res.status(500).json({ message: error.message });
+    }
+
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const logout = (req, res) => {
+export const logout = (req: Request, res: Response) => {
   try {
     res.cookie("token", "", { ...cookieConfig, expires: new Date(0) });
+
     return res.sendStatus(200);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    if (error instanceof Error) {
+      return res.status(500).json({ message: error.message });
+    }
+
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const verifyToken = async (req, res) => {
+export const verifyToken = async (req: Request, res: Response) => {
   try {
     const { token } = req.cookies;
+
     if (!token) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const user = jwt.verify(token, process.env.JWT_SECRET);
+    const jwtSecret = process.env.JWT_SECRET;
+
+    if (!jwtSecret) {
+      return res.status(500).json({ message: "JWT_SECRET is not defined" });
+    }
+
+    const user = jwt.verify(token, jwtSecret) as JwtPayload;
 
     const userFound = await User.findById(user.id);
 
@@ -109,13 +145,18 @@ export const verifyToken = async (req, res) => {
       updatedAt: userFound.updatedAt,
     });
   } catch (error) {
-    return res.status(401).json({ message: "Invalid token" });
+    if (error instanceof Error) {
+      return res.status(500).json({ message: error.message });
+    }
+
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const profile = async (req, res) => {
+export const profile = async (req: Request, res: Response) => {
   try {
     const userFound = await User.findById(req.user.id);
+
     if (!userFound) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -129,6 +170,10 @@ export const profile = async (req, res) => {
       updatedAt: userFound.updatedAt,
     });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    if (error instanceof Error) {
+      return res.status(500).json({ message: error.message });
+    }
+
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

@@ -7,6 +7,8 @@ function HomePage() {
 
   const featuredProducts = products?.slice(0, 4) || [];
 
+  console.log(products);
+
   return (
     <>
       <Helmet>
@@ -131,7 +133,7 @@ function HomePage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {featuredProducts.map((product) => (
+              {/* {featuredProducts.map((product) => (
                 <Link
                   key={product._id}
                   to={`/products/${product._id}`}
@@ -159,7 +161,7 @@ function HomePage() {
                     </p>
                   </div>
                 </Link>
-              ))}
+              ))} */}
             </div>
           )}
 

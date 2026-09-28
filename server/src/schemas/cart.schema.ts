@@ -6,6 +6,7 @@ const objectIdSchema = z
   .regex(/^[0-9a-fA-F]{24}$/, {
     message: "Invalid product ID",
   });
+
 export const addToCartSchema = z.object({
   productId: objectIdSchema,
 });
@@ -15,3 +16,6 @@ export const updateCartItemSchema = z.object({
     message: "Quantity must be at least 1",
   }),
 });
+
+export type AddToCartBody = z.infer<typeof addToCartSchema>;
+export type UpdateCartItemBody = z.infer<typeof updateCartItemSchema>;

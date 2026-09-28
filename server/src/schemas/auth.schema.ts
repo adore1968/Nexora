@@ -5,14 +5,9 @@ export const registerSchema = z.object({
     message: "Username is required",
   }),
 
-  email: z
-    .string({
-      error: "Email is required",
-    })
-    .trim()
-    .email({
-      error: "Invalid email address",
-    }),
+  email: z.email({
+    error: "Invalid email address",
+  }),
 
   password: z
     .string({
@@ -24,14 +19,9 @@ export const registerSchema = z.object({
 });
 
 export const loginSchema = z.object({
-  email: z
-    .string({
-      error: "Email is required",
-    })
-    .trim()
-    .email({
-      error: "Invalid email address",
-    }),
+  email: z.email({
+    error: "Invalid email address",
+  }),
 
   password: z
     .string({
@@ -41,3 +31,6 @@ export const loginSchema = z.object({
       message: "Password must be at least 8 characters long",
     }),
 });
+
+export type RegisterBody = z.infer<typeof registerSchema>;
+export type LoginBody = z.infer<typeof loginSchema>;

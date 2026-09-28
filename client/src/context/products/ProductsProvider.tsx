@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ProductsContext } from "./ProductsContext";
 import {
   getProductsRequest,
@@ -9,7 +9,11 @@ import {
 } from "../../api/products";
 import { toast } from "react-toastify";
 
-function ProductsProvider({ children }) {
+interface ProductsProviderProps {
+  children: ReactNode;
+}
+
+function ProductsProvider({ children }: ProductsProviderProps) {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
 

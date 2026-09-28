@@ -1,6 +1,7 @@
-import User from "../models/user.model.js";
+import { NextFunction, Request, Response } from "express";
+import { User } from "../models/user.model.js";
 
-const isAdmin = async (req, res, next) => {
+const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userFound = await User.findById(req.user.id);
 
@@ -14,8 +15,14 @@ const isAdmin = async (req, res, next) => {
 
     next();
   } catch (error) {
+    if (error instanceof Error) {
+      return res.status(500).json({
+        message: error.message,
+      });
+    }
+
     return res.status(500).json({
-      message: error.message,
+      message: "Internal server error",
     });
   }
 };
