@@ -1,6 +1,6 @@
 # 🛒 Nexora.
 
-E-commerce Full Stack desarrollado con **React, Node.js, Express y MongoDB**.
+E-commerce Full Stack desarrollado con **React, TypeScript, Node.js, Express y MongoDB**.
 
 La aplicación permite explorar productos, crear cuentas, iniciar sesión, administrar un carrito de compras y gestionar productos mediante un panel de administración.
 
@@ -8,42 +8,42 @@ La aplicación permite explorar productos, crear cuentas, iniciar sesión, admin
 
 ### 👤 Autenticación
 
-- Registro de usuarios.
-- Inicio de sesión.
-- Cierre de sesión.
-- Autenticación mediante JWT.
-- Cookies HTTP.
-- Rutas protegidas.
-- Roles de usuario y administrador.
+* Registro de usuarios.
+* Inicio de sesión.
+* Cierre de sesión.
+* Autenticación mediante JWT.
+* Cookies HTTP.
+* Rutas protegidas.
+* Roles de usuario y administrador.
 
 ### 🛍️ Productos
 
-- Listado de productos.
-- Vista individual de cada producto.
-- Búsqueda de productos.
-- Paginación.
-- Categorías.
-- Control de stock.
-- Productos destacados.
+* Listado de productos.
+* Vista individual de cada producto.
+* Búsqueda de productos.
+* Paginación.
+* Categorías.
+* Control de stock.
+* Productos destacados.
 
 ### 🛒 Carrito
 
-- Agregar productos al carrito.
-- Actualizar cantidades.
-- Eliminar productos.
-- Vaciar carrito.
-- Control de stock disponible.
-- Resumen del carrito.
+* Agregar productos al carrito.
+* Actualizar cantidades.
+* Eliminar productos.
+* Vaciar carrito.
+* Control de stock disponible.
+* Resumen del carrito.
 
 ### 🔐 Panel de administración
 
 Los administradores pueden:
 
-- Crear productos.
-- Editar productos.
-- Eliminar productos.
-- Administrar stock.
-- Subir imágenes de productos.
+* Crear productos.
+* Editar productos.
+* Eliminar productos.
+* Administrar stock.
+* Subir imágenes de productos.
 
 ### ☁️ Imágenes
 
@@ -51,13 +51,13 @@ Las imágenes de los productos se almacenan mediante **Cloudinary**.
 
 ### 🎨 Interfaz
 
-- Diseño responsive.
-- Tailwind CSS.
-- React Router DOM.
-- React Toastify.
-- Estados de carga.
-- Página de error personalizada.
-- Diseño adaptado a dispositivos móviles.
+* Diseño responsive.
+* Tailwind CSS.
+* React Router DOM.
+* React Toastify.
+* Estados de carga.
+* Página de error personalizada.
+* Diseño adaptado a dispositivos móviles.
 
 ---
 
@@ -65,36 +65,38 @@ Las imágenes de los productos se almacenan mediante **Cloudinary**.
 
 ### Frontend
 
-- React
-- Vite
-- React Router DOM
-- Tailwind CSS
-- Axios
-- React Hook Form
-- React Toastify
-- React Helmet Async
-- Cloudinary
+* React
+* **TypeScript**
+* Vite
+* React Router DOM
+* Tailwind CSS
+* Axios
+* React Hook Form
+* React Toastify
+* React Helmet Async
+* Cloudinary
 
 ### Backend
 
-- Node.js
-- Express
-- MongoDB
-- Mongoose
-- JWT
-- bcryptjs
-- Zod
-- Cookie Parser
-- CORS
-- Morgan
-- dotenv
+* Node.js
+* **TypeScript**
+* Express
+* MongoDB
+* Mongoose
+* JWT
+* bcryptjs
+* Zod
+* Cookie Parser
+* CORS
+* Morgan
+* dotenv
 
 ---
 
 ## 📁 Estructura del proyecto
 
 ```text
-Products/
+Nexora/
 │
 ├── client/
 │   ├── public/
@@ -105,8 +107,9 @@ Products/
 │       ├── context/
 │       ├── pages/
 │       ├── services/
-│       ├── App.jsx
-│       └── main.jsx
+│       ├── types/
+│       ├── App.tsx
+│       └── main.tsx
 │
 ├── server/
 │   └── src/
@@ -116,10 +119,11 @@ Products/
 │       ├── models/
 │       ├── routes/
 │       ├── schemas/
+│       ├── types/
 │       ├── utils/
-│       ├── app.js
-│       ├── db.js
-│       └── index.js
+│       ├── app.ts
+│       ├── db.ts
+│       └── index.ts
 │
 ├── .gitignore
 └── README.md
@@ -138,7 +142,7 @@ git clone https://github.com/TU-USUARIO/TU-REPOSITORIO.git
 Entrar al proyecto:
 
 ```bash
-cd Products
+cd Nexora
 ```
 
 ### 2. Instalar dependencias del backend
@@ -248,23 +252,23 @@ npm run dev
 
 Puede:
 
-- Navegar por los productos.
-- Ver los detalles de los productos.
-- Agregar productos al carrito.
-- Modificar cantidades.
-- Eliminar productos del carrito.
-- Vaciar el carrito.
+* Navegar por los productos.
+* Ver los detalles de los productos.
+* Agregar productos al carrito.
+* Modificar cantidades.
+* Eliminar productos del carrito.
+* Vaciar el carrito.
 
 ### Administrador
 
 Además de las funciones anteriores, puede:
 
-- Acceder al panel de administración.
-- Crear productos.
-- Editar productos.
-- Eliminar productos.
-- Administrar el stock.
-- Subir imágenes de productos.
+* Acceder al panel de administración.
+* Crear productos.
+* Editar productos.
+* Eliminar productos.
+* Administrar el stock.
+* Subir imágenes de productos.
 
 ---
 
@@ -272,99 +276,7 @@ Además de las funciones anteriores, puede:
 
 El proyecto implementa:
 
-- JWT para autenticación.
-- Cookies HTTP.
-- Contraseñas protegidas con bcryptjs.
-- Rutas protegidas.
-- Middleware de autenticación.
-- Middleware de autorización por roles.
-- Validación de datos mediante Zod.
-- CORS.
-- Variables sensibles mediante archivos `.env`.
-
----
-
-## 📡 API
-
-### Authentication
-
-```text
-POST /api/auth/register
-POST /api/auth/login
-POST /api/auth/logout
-GET  /api/auth/check
-```
-
-### Products
-
-```text
-GET    /api/products
-GET    /api/products/:id
-POST   /api/products
-PUT    /api/products/:id
-DELETE /api/products/:id
-```
-
-### Cart
-
-```text
-GET    /api/cart
-POST   /api/cart
-PUT    /api/cart
-DELETE /api/cart/:productId
-DELETE /api/cart
-```
-
-Los endpoints que requieren autenticación están protegidos mediante middleware.
-
----
-
-## 🧪 Validación
-
-Los datos recibidos por el backend son validados utilizando **Zod**.
-
-Esto permite controlar datos como:
-
-- Nombre del producto.
-- Descripción.
-- Precio.
-- Stock.
-- Categoría.
-- Email.
-- Contraseña.
-- Datos del carrito.
-
----
-
-## 📦 Build
-
-Para generar una versión de producción del frontend:
-
-```bash
-cd client
-npm run build
-```
-
-Los archivos generados estarán disponibles en:
-
-```text
-client/dist/
-```
-
----
-
-## 📸 Capturas
-
-Próximamente.
-
----
-
-## 👨‍💻 Autor
-
-Desarrollado como proyecto Full Stack para portfolio, utilizando tecnologías modernas de desarrollo web.
-
----
-
-## 📄 Licencia
-
-Este proyecto fue desarrollado con fines educativos y de portfolio.
+* JWT para autenticación.
+* Cookies HTTP.
+* Contraseñas protegidas con bcryptjs.
+* Rutas prote
