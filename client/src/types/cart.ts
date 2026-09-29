@@ -8,7 +8,7 @@ export interface CartProduct {
 export interface Cart {
   _id: string;
   user: string;
-  products: Product[];
+  products: CartProduct[];
   createdAt: string;
   updatedAt: string;
 }

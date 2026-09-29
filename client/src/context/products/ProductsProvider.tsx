@@ -8,16 +8,22 @@ import {
   deleteProductRequest,
 } from "../../api/products";
 import { toast } from "react-toastify";
+import {
+  type CreateProduct,
+  type Product,
+  type UpdateProduct,
+} from "../../types/products";
+import axios from "axios";
 
 interface ProductsProviderProps {
   children: ReactNode;
 }
 
 function ProductsProvider({ children }: ProductsProviderProps) {
-  const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [products, setProducts] = useState<Product[]>([]);
 
-  const getProduct = async (id) => {
+  const getProduct = async (id: string): Promise<Product | undefined> => {
     try {
       const res = await getProductRequest(id);
       return res.data;
@@ -26,18 +32,20 @@ function ProductsProvider({ children }: ProductsProviderProps) {
     }
   };
 
-  const createProduct = async (product) => {
+  const createProduct = async (product: CreateProduct) => {
     try {
       const res = await createProductRequest(product);
       setProducts((prevProducts) => [...prevProducts, res.data]);
       toast.success("Product created successfully");
     } catch (error) {
       console.log(error);
-      toast.error(error.response?.data?.message || "Error adding product");
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Error adding product");
+      }
     }
   };
 
-  const updateProduct = async (id, product) => {
+  const updateProduct = async (id: string, product: UpdateProduct) => {
     try {
       const res = await updateProductRequest(id, product);
       setProducts((prevProducts) =>
@@ -48,18 +56,22 @@ function ProductsProvider({ children }: ProductsProviderProps) {
       toast.success("Product updated successfully");
     } catch (error) {
       console.log(error);
-      toast.error(error.response?.data?.message || "Error adding product");
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Error adding product");
+      }
     }
   };
 
-  const deleteProduct = async (id) => {
+  const deleteProduct = async (id: string) => {
     try {
       await deleteProductRequest(id);
       setProducts(products.filter((product) => product._id !== id));
       toast.success("Product removed");
     } catch (error) {
       console.log(error);
-      toast.error(error.response?.data?.message || "Error removing product");
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Error removing product");
+      }
     }
   };
 

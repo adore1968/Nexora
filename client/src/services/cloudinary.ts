@@ -1,6 +1,17 @@
 import axios from "axios";
 
-const uploadImage = async (file) => {
+interface CloudinaryResponse {
+  secure_url: string;
+  public_id: string;
+  asset_id: string;
+  width: number;
+  height: number;
+  format: string;
+}
+
+const uploadImage = async (
+  file: File,
+): Promise<CloudinaryResponse | undefined> => {
   const formData = new FormData();
 
   formData.append("file", file);
@@ -16,7 +27,9 @@ const uploadImage = async (file) => {
     );
     return res.data;
   } catch (error) {
-    console.log(error.response?.data);
+    if (axios.isAxiosError(error)) {
+      console.log(error.response?.data);
+    }
   }
 };
 

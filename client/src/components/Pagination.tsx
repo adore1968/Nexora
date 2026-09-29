@@ -1,4 +1,14 @@
-function Pagination({ currentPage, totalPages, setCurrentPage }) {
+type PaginationProps = {
+  currentPage: number;
+  totalPages: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+};
+
+function Pagination({
+  currentPage,
+  totalPages,
+  setCurrentPage,
+}: PaginationProps) {
   if (totalPages <= 1) {
     return null;
   }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { CartContext } from "./CartContext";
 import {
   addToCartRequest,
@@ -9,45 +9,60 @@ import {
 } from "../../api/cart";
 import { useAuth } from "../auth/AuthContext";
 import { toast } from "react-toastify";
+import { type Cart, type CartProduct } from "../../types/cart";
+import axios from "axios";
 
-function CartProvider({ children }) {
-  const [loading, setLoading] = useState(true);
-  const [cart, setCart] = useState([]);
+type CartProviderProps = {
+  children: ReactNode;
+};
+
+function CartProvider({ children }: CartProviderProps) {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [cart, setCart] = useState<CartProduct[]>([]);
   const { user, loading: authLoading } = useAuth();
 
-  const addToCart = async (productId, productName) => {
+  const addToCart = async (productId: string, productName: string) => {
     try {
       const res = await addToCartRequest(productId);
       setCart(res.data.products);
       toast.success(`${productName} added to the cart`);
     } catch (error) {
       console.log(error);
-      toast.error(
-        error.response?.data?.message || "Error adding product to cart",
-      );
+
+      if (axios.isAxiosError(error)) {
+        toast.error(
+          error.response?.data?.message || "Error adding product to cart",
+        );
+      }
     }
   };
 
-  const updateCartItem = async (productId, quantity) => {
+  const updateCartItem = async (productId: string, quantity: number) => {
     try {
       const res = await updateCartItemRequest(productId, quantity);
       setCart(res.data.products);
     } catch (error) {
       console.log(error);
-      toast.error(error.response?.data?.message || "Error updating cart");
+
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Error updating cart");
+      }
     }
   };
 
-  const removeFromCart = async (productId) => {
+  const removeFromCart = async (productId: string) => {
     try {
       const res = await removeFromCartRequest(productId);
       setCart(res.data.products);
       toast.success(`Product successfully removed from cart`);
     } catch (error) {
       console.log(error);
-      toast.error(
-        error.response?.data?.message || "Error removing product from cart",
-      );
+
+      if (axios.isAxiosError(error)) {
+        toast.error(
+          error.response?.data?.message || "Error removing product from cart",
+        );
+      }
     }
   };
 
@@ -58,7 +73,10 @@ function CartProvider({ children }) {
       toast.success(`Cart successfully cleared`);
     } catch (error) {
       console.log(error);
-      toast.error(error.response?.data?.message || "Error clearing cart");
+
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Error clearing cart");
+      }
     }
   };
 

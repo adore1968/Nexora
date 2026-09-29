@@ -1,15 +1,20 @@
 import { Link } from "react-router-dom";
 import { useProducts } from "../context/products/ProductsContext";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import type { Product } from "../types/products";
 
-function AdminProductCard({ product }) {
+type AdminProductCardProps = {
+  product: Product;
+};
+
+function AdminProductCard({ product }: AdminProductCardProps) {
   const { deleteProduct } = useProducts();
 
   const isOutOfStock = product.stock <= 0;
 
-  const handleDelete = async (productId) => {
+  const handleDelete = async (productId: string) => {
     if (window.confirm(`Are you sure you want to remove ${product.name}?`)) {
-      await deleteProduct(productId);
+      deleteProduct(productId);
     }
   };
 
@@ -59,7 +64,7 @@ function AdminProductCard({ product }) {
           </span>
 
           <span className="text-sm text-zinc-500">
-            Stock:{" "}
+            Stock:
             <span className="font-medium text-zinc-300">{product.stock}</span>
           </span>
         </div>

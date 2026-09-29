@@ -14,7 +14,7 @@ import {
 
 function Navbar() {
   const { isAuthenticated, user, logout } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const closeMenu = () => {
     setIsOpen(false);

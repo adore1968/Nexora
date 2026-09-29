@@ -1,10 +1,16 @@
 import { createContext, useContext } from "react";
-import type { RegisterUser, User, UserCredentials } from "../../types/auth";
+import type {
+  AuthError,
+  RegisterUser,
+  User,
+  UserCredentials,
+} from "../../types/auth";
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   loading: boolean;
+  errors: AuthError[] | null;
   signup: (data: RegisterUser) => Promise<void>;
   signin: (data: UserCredentials) => Promise<void>;
   logout: () => Promise<void>;

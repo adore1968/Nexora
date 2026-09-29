@@ -11,7 +11,9 @@ import {
   type User,
   type RegisterUser,
   type UserCredentials,
+  type AuthError,
 } from "../../types/auth";
+import axios from "axios";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -21,16 +23,20 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [errors, setErrors] = useState(null);
+  const [errors, setErrors] = useState<AuthError[] | null>(null);
 
-  const getErrorMessage = (error, fallback) => {
-    const data = error.response?.data;
+  const getErrorMessage = (error: unknown, fallback: string) => {
+    if (axios.isAxiosError(error)) {
+      const data = error.response?.data;
 
-    if (Array.isArray(data) && data.length > 0) {
-      return data[0].error;
+      if (Array.isArray(data) && data.length > 0) {
+        return data[0].error;
+      }
+
+      return data?.message || fallback;
     }
 
-    return data?.message || fallback;
+    return fallback;
   };
 
   const signup = async (data: RegisterUser): Promise<void> => {
@@ -42,9 +48,12 @@ function AuthProvider({ children }: AuthProviderProps) {
       setErrors(null);
 
       toast.success("Successful register");
-    } catch (error) {
-      console.log(error.response?.data);
-      setErrors(error.response?.data || null);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data);
+        setErrors(error.response?.data || null);
+      }
+
       toast.error(getErrorMessage(error, "Register error"));
     } finally {
       setLoading(false);
@@ -61,8 +70,11 @@ function AuthProvider({ children }: AuthProviderProps) {
 
       toast.success("Successful login");
     } catch (error) {
-      console.log(error.response?.data);
-      setErrors(error.response?.data || null);
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data);
+        setErrors(error.response?.data || null);
+      }
+
       toast.error(getErrorMessage(error, "Login error"));
     } finally {
       setLoading(false);
@@ -77,8 +89,10 @@ function AuthProvider({ children }: AuthProviderProps) {
 
       toast.success("Successful logout");
     } catch (error) {
-      console.log(error.response?.data);
-      toast.error(error.response?.data?.message || "Logout error");
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data);
+        toast.error(error.response?.data?.message || "Logout error");
+      }
     }
   };
 
@@ -89,7 +103,10 @@ function AuthProvider({ children }: AuthProviderProps) {
         setUser(res.data);
         setIsAuthenticated(true);
       } catch (error) {
-        console.log(error.response?.data);
+        if (axios.isAxiosError(error)) {
+          console.log(error.response?.data);
+        }
+
         setUser(null);
         setIsAuthenticated(false);
       } finally {

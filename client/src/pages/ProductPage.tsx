@@ -4,25 +4,28 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth/AuthContext";
 import { useCart } from "../context/cart/CartContext";
 import { Helmet } from "react-helmet-async";
+import { type Product } from "../types/products";
 
 function ProductPage() {
-  const [product, setProduct] = useState(null);
-  const [quantity, setQuantity] = useState(1);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [quantity, setQuantity] = useState<number>(1);
 
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const { getProduct } = useProducts();
   const { isAuthenticated, user } = useAuth();
   const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const product = await getProduct(id);
-      setProduct(product);
+      if (id) {
+        const product = await getProduct(id);
+        if (product) {
+          setProduct(product);
+        }
+      }
     };
 
-    if (id) {
-      fetchProduct();
-    }
+    fetchProduct();
   }, [id]);
 
   if (!product) {
@@ -35,8 +38,8 @@ function ProductPage() {
 
   const isOutOfStock = product.stock === 0;
 
-  const handleAddToCart = async () => {
-    await addToCart(product._id, quantity);
+  const handleAddToCart = () => {
+    addToCart(product._id, product.name);
   };
 
   return (

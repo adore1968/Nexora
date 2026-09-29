@@ -12,6 +12,7 @@ import {
   FiUpload,
 } from "react-icons/fi";
 import { Helmet } from "react-helmet-async";
+import { CreateProduct } from "../types/products";
 
 function ProductFormPage() {
   const {
@@ -20,16 +21,16 @@ function ProductFormPage() {
     setValue,
     control,
     formState: { errors },
-  } = useForm();
+  } = useForm<CreateProduct>();
 
   const { getProduct, updateProduct, createProduct } = useProducts();
 
   const navigate = useNavigate();
   const params = useParams();
 
-  const [preview, setPreview] = useState("");
-  const [currentImage, setCurrentImage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [preview, setPreview] = useState<string>("");
+  const [currentImage, setCurrentImage] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const image = useWatch({
     control,
@@ -57,13 +58,15 @@ function ProductFormPage() {
 
       const product = await getProduct(params.id);
 
-      setValue("name", product.name);
-      setValue("description", product.description);
-      setValue("price", product.price);
-      setValue("stock", product.stock);
-      setValue("category", product.category);
+      if (product) {
+        setValue("name", product.name);
+        setValue("description", product.description);
+        setValue("price", product.price);
+        setValue("stock", Number(product.stock));
+        setValue("category", product.category);
 
-      setCurrentImage(product.image);
+        setCurrentImage(product.image);
+      }
     };
 
     loadProduct();
@@ -77,7 +80,10 @@ function ProductFormPage() {
 
       if (data.image?.length > 0) {
         const uploadedImage = await uploadImage(data.image[0]);
-        imageUrl = uploadedImage.secure_url;
+
+        if (uploadedImage) {
+          imageUrl = uploadedImage.secure_url;
+        }
       }
 
       const product = {
@@ -90,9 +96,9 @@ function ProductFormPage() {
       };
 
       if (params.id) {
-        await updateProduct(params.id, product);
+        updateProduct(params.id, product);
       } else {
-        await createProduct(product);
+        createProduct(product);
       }
 
       navigate("/admin");

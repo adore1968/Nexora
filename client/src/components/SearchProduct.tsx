@@ -1,4 +1,9 @@
-function SearchProduct({ search, setSearch }) {
+type SearchProductProps = {
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+};
+
+function SearchProduct({ search, setSearch }: SearchProductProps) {
   return (
     <div className="mb-8">
       <input

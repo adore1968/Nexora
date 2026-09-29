@@ -2,8 +2,13 @@ import { Link } from "react-router-dom";
 import { useProducts } from "../context/products/ProductsContext";
 import { useAuth } from "../context/auth/AuthContext";
 import { useCart } from "../context/cart/CartContext";
+import type { Product } from "../types/products";
 
-function ProductCard({ product }) {
+type ProductCardProps = {
+  product: Product;
+};
+
+function ProductCard({ product }: ProductCardProps) {
   const { deleteProduct } = useProducts();
   const { user, isAuthenticated } = useAuth();
   const { addToCart } = useCart();
@@ -12,9 +17,9 @@ function ProductCard({ product }) {
   const isUser = isAuthenticated && user?.role === "user";
   const isOutOfStock = product.stock <= 0;
 
-  const handleDelete = async (productId) => {
+  const handleDelete = async (productId: string) => {
     if (window.confirm(`Are you sure you want to remove ${product.name}?`)) {
-      await deleteProduct(productId);
+      deleteProduct(productId);
     }
   };
 

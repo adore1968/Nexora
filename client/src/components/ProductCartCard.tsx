@@ -1,14 +1,19 @@
 import { useCart } from "../context/cart/CartContext";
 import { FiMinus, FiPlus, FiTrash2 } from "react-icons/fi";
+import type { CartProduct } from "../types/cart";
 
-function ProductCartCard({ product }) {
+type ProductCartCardProps = {
+  product: CartProduct;
+};
+
+function ProductCartCard({ product }: ProductCartCardProps) {
   const { product: productData, quantity } = product;
   const { updateCartItem, removeFromCart } = useCart();
 
   const subtotal = productData.price * quantity;
   const maxStock = productData.stock;
 
-  const handleRemove = async (productId) => {
+  const handleRemove = async (productId: string) => {
     if (
       window.confirm(
         "Are you sure you want to remove this product from the cart?",

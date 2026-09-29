@@ -3,13 +3,14 @@ import { useAuth } from "../context/auth/AuthContext";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { type RegisterUser } from "../types/auth";
 
 function RegisterPage() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<RegisterUser>();
 
   const { isAuthenticated, errors: signupErrors, signup } = useAuth();
 

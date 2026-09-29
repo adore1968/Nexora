@@ -1,7 +1,12 @@
 import { FiCreditCard, FiTrash2 } from "react-icons/fi";
 import { useCart } from "../context/cart/CartContext";
+import type { CartProduct } from "../types/cart";
 
-function CartSummary({ cart }) {
+type CartSummaryProps = {
+  cart: CartProduct[];
+};
+
+function CartSummary({ cart }: CartSummaryProps) {
   const { clearCart } = useCart();
 
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
