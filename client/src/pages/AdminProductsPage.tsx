@@ -16,8 +16,8 @@ import { Helmet } from "react-helmet-async";
 function AdminProductsPage() {
   const { loading, products } = useProducts();
 
-  const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const productsPerPage = 8;
 

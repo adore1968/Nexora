@@ -12,7 +12,11 @@ import {
   FiUpload,
 } from "react-icons/fi";
 import { Helmet } from "react-helmet-async";
-import { CreateProduct } from "../types/products";
+import { type CreateProduct } from "../types/products";
+
+type ProductForm = Omit<CreateProduct, "image"> & {
+  image: FileList;
+};
 
 function ProductFormPage() {
   const {
@@ -21,7 +25,7 @@ function ProductFormPage() {
     setValue,
     control,
     formState: { errors },
-  } = useForm<CreateProduct>();
+  } = useForm<ProductForm>();
 
   const { getProduct, updateProduct, createProduct } = useProducts();
 
@@ -43,7 +47,11 @@ function ProductFormPage() {
       return;
     }
 
-    const objectUrl = URL.createObjectURL(image[0]);
+    const file = image[0];
+
+    if (!file) return;
+
+    const objectUrl = URL.createObjectURL(file);
 
     setPreview(objectUrl);
 
@@ -62,7 +70,7 @@ function ProductFormPage() {
         setValue("name", product.name);
         setValue("description", product.description);
         setValue("price", product.price);
-        setValue("stock", Number(product.stock));
+        setValue("stock", product.stock);
         setValue("category", product.category);
 
         setCurrentImage(product.image);
@@ -78,11 +86,13 @@ function ProductFormPage() {
 
       let imageUrl = currentImage;
 
-      if (data.image?.length > 0) {
-        const uploadedImage = await uploadImage(data.image[0]);
+      if (data.image.length > 0) {
+        if (data.image[0]) {
+          const uploadedImage = await uploadImage(data.image[0]);
 
-        if (uploadedImage) {
-          imageUrl = uploadedImage.secure_url;
+          if (uploadedImage) {
+            imageUrl = uploadedImage.secure_url;
+          }
         }
       }
 
@@ -203,7 +213,7 @@ function ProductFormPage() {
                 </label>
 
                 <textarea
-                  rows="4"
+                  rows={4}
                   id="description"
                   placeholder="Describe the product..."
                   {...register("description", {

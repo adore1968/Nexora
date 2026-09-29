@@ -16,7 +16,7 @@ export interface CreateProduct {
   name: string;
   description: string;
   price: number;
-  stock: string;
+  stock: number;
   category: string;
   image: string;
 }

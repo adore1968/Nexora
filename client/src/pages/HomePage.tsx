@@ -7,8 +7,6 @@ function HomePage() {
 
   const featuredProducts = products?.slice(0, 4) || [];
 
-  console.log(products);
-
   return (
     <>
       <Helmet>

@@ -3,13 +3,14 @@ import { useAuth } from "../context/auth/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
+import type { UserCredentials } from "../types/auth";
 
 function LoginPage() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<UserCredentials>();
 
   const { errors: signinErrors, isAuthenticated, signin } = useAuth();
 

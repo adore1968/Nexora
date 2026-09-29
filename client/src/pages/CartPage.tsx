@@ -55,7 +55,7 @@ function CartPage() {
           {/* Products */}
           <div className="min-w-0 space-y-4">
             {cart.map((item) => (
-              <ProductCartCard key={item._id} product={item} />
+              <ProductCartCard key={item.product._id} product={item} />
             ))}
           </div>
 
